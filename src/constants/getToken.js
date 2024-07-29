@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
 export const getToken = () => {
@@ -13,4 +12,9 @@ export const getToken = () => {
     console.error("Failed to decode JWT:", error);
     return null;
   }
+};
+
+export const getStoredToken = () => {
+  const token = localStorage.getItem('token');
+  return token ? JSON.parse(token) : null;
 };

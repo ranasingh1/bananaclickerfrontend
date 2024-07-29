@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../constants/constant";
 import UpdateUser from "./UserForm";
+import { AuthContext } from "../../context/AuthContext";
 
 const UserMangement = () => {
   const [users, setUsers] = useState([]);
   const [toggle, setToggle] = useState(false);
   const [user, setUser] = useState({});
   const [mode, setMode] = useState("");
-
+  const { token } = useContext(AuthContext);
   useEffect(() => {
     fetchUsers();
   }, []);
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/v1/getUsers`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(`${BASE_URL}/api/v1/getUsers`, );
       setUsers(response.data);
       setToggle(false);
     } catch (error) {
@@ -31,9 +30,7 @@ const UserMangement = () => {
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`${BASE_URL}/api/v1/deleteUser/${id}`, {
-        withCredentials: true,
-      });
+      await axios.delete(`${BASE_URL}/api/v1/deleteUser/${id}`, );
       fetchUsers();
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -45,7 +42,6 @@ const UserMangement = () => {
       await axios.put(
         `${BASE_URL}/api/v1/blockUser/${userId}`,
         {},
-        { withCredentials: true }
       );
       fetchUsers();
     } catch (error) {
@@ -58,7 +54,6 @@ const UserMangement = () => {
       await axios.put(
         `${BASE_URL}/api/v1/unblockUser/${userId}`,
         {},
-        { withCredentials: true }
       );
       fetchUsers();
     } catch (error) {

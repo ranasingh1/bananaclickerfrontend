@@ -53,9 +53,7 @@ const UserForm = ({ user, fetchUsers, mode, handleClose }) => {
 
   const createUser = async () => {
     try {
-      await axios.post(`${BASE_URL}/api/v1/createUser`, userForm, {
-        withCredentials: true,
-      });
+      await axios.post(`${BASE_URL}/api/v1/createUser`, userForm, );
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -63,9 +61,7 @@ const UserForm = ({ user, fetchUsers, mode, handleClose }) => {
 
   const updateUser = async (id) => {
     try {
-      await axios.put(`${BASE_URL}/api/v1/updateUser/${id}`, userForm, {
-        withCredentials: true,
-      });
+      await axios.put(`${BASE_URL}/api/v1/updateUser/${id}`, userForm, );
     } catch (error) {
       console.error("Error updating user:", error);
     }

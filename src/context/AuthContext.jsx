@@ -11,6 +11,7 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({ user: getToken() });
   const [isBlocked, setIsBlocked] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
 
   const fetchUserRole = async () => {
     try {
@@ -26,32 +27,33 @@ const AuthProvider = ({ children }) => {
     }
   };
 
- const getUser = async ()=>{
-  try {
-    const response = await axios.get(`${BASE_URL}/api/v1/getUser/${auth.user.id}`)
-    const data = response.data;
-    setIsBlocked(data.isBlocked)
-  } catch (err) {
-    console.log(err);
-  }
- }
+  const getUser = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/api/v1/getUser/${auth.user.id}`
+      );
+      const data = response.data;
+      setIsBlocked(data.isBlocked);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     fetchUserRole();
     getUser();
   }, []);
 
-  
   const login = async (username, password) => {
     try {
       const response = await axios.post(
         `${BASE_URL}/api/v1/login`,
         { username, password },
-        { withCredentials: true }
       );
       const data = response.data;
-      localStorage.setItem('token', data?.token)
-      console.log(data);
+      localStorage.setItem("token", data.token);
+      setToken(token);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       fetchUserRole();
     } catch (err) {
       console.log(err);
@@ -61,18 +63,15 @@ const AuthProvider = ({ children }) => {
   const logout = async () => {
     const token = getToken();
     if (token?.username) {
-      socket.emit('userOffline', token?.username);
+      socket.emit("userOffline", token?.username);
     }
-    await axios.post(
-      `${BASE_URL}/api/v1/logout`,
-      {},
-      { withCredentials: true }
-    );
+    localStorage.removeItem("token");
+    axios.defaults.headers.common["Authorization"] = "";
     setAuth({ user: null });
   };
 
   return (
-    <AuthContext.Provider value={{ auth, login, logout, isBlocked }}>
+    <AuthContext.Provider value={{ auth, login, logout, isBlocked, token }}>
       {children}
     </AuthContext.Provider>
   );
