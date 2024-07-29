@@ -49,6 +49,9 @@ const AuthProvider = ({ children }) => {
         { username, password },
         { withCredentials: true }
       );
+      const data = response.data;
+      localStorage.setItem('token', data?.token)
+      console.log(data);
       fetchUserRole();
     } catch (err) {
       console.log(err);
