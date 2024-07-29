@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@keyframes fade-out {
+    0% {
+      opacity: 1;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-40px);
+    }
+  }
+  
+  .animate-fade-out {
+    animation: fade-out 1s forwards;
+  }
+  
