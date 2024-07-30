@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import FormInput from "../FormInput";
 import axios from "axios";
 import { BASE_URL } from "../../constants/constant";
+import { AuthContext } from "../../context/AuthContext";
 
 const UserForm = ({ user, fetchUsers, mode, handleClose }) => {
   const [userForm, setUserForm] = useState({
@@ -11,6 +12,7 @@ const UserForm = ({ user, fetchUsers, mode, handleClose }) => {
     email: "",
     isBlocked: false,
   });
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     if (mode === "update" && user) {
@@ -53,7 +55,11 @@ const UserForm = ({ user, fetchUsers, mode, handleClose }) => {
 
   const createUser = async () => {
     try {
-      await axios.post(`${BASE_URL}/api/v1/createUser`, userForm, );
+      await axios.post(`${BASE_URL}/api/v1/createUser`, userForm,
+        {
+          headers: { Authorization: `Bearer ${token}`}
+          },
+       );
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -61,7 +67,11 @@ const UserForm = ({ user, fetchUsers, mode, handleClose }) => {
 
   const updateUser = async (id) => {
     try {
-      await axios.put(`${BASE_URL}/api/v1/updateUser/${id}`, userForm, );
+      await axios.put(`${BASE_URL}/api/v1/updateUser/${id}`, userForm,
+        {
+          headers: { Authorization: `Bearer ${token}`}
+          },
+       );
     } catch (error) {
       console.error("Error updating user:", error);
     }

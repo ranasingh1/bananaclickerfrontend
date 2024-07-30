@@ -15,8 +15,13 @@ const UserMangement = () => {
   }, []);
 
   const fetchUsers = async () => {
+    console.log(token, `g`);
     try {
-      const response = await axios.get(`${BASE_URL}/api/v1/getUsers`, );
+      const response = await axios.get(`${BASE_URL}/api/v1/getUsers`,
+        {
+        headers: { Authorization: `Bearer ${token}`}
+        }, 
+    );
       setUsers(response.data);
       setToggle(false);
     } catch (error) {
@@ -30,7 +35,11 @@ const UserMangement = () => {
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`${BASE_URL}/api/v1/deleteUser/${id}`, );
+      await axios.delete(`${BASE_URL}/api/v1/deleteUser/${id}`, 
+        {
+          headers: { Authorization: `Bearer ${token}`}
+          },
+      );
       fetchUsers();
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -42,6 +51,9 @@ const UserMangement = () => {
       await axios.put(
         `${BASE_URL}/api/v1/blockUser/${userId}`,
         {},
+        {
+          headers: { Authorization: `Bearer ${token}`}
+        },
       );
       fetchUsers();
     } catch (error) {
@@ -54,6 +66,9 @@ const UserMangement = () => {
       await axios.put(
         `${BASE_URL}/api/v1/unblockUser/${userId}`,
         {},
+        {
+          headers: { Authorization: `Bearer ${token}`}
+        },
       );
       fetchUsers();
     } catch (error) {
